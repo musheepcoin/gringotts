@@ -77,3 +77,26 @@ const configs = {
 
 loadParticles(configs);
 
+document.addEventListener('DOMContentLoaded', () => {
+    const copyButton = document.getElementById('copy-button');
+    const contractAddressEl = document.getElementById('contract-address');
+
+    if (copyButton && contractAddressEl) {
+        copyButton.addEventListener('click', () => {
+            const addressText = contractAddressEl.innerText.replace('CA: ', '').trim();
+            navigator.clipboard.writeText(addressText).then(() => {
+                const originalIcon = copyButton.innerHTML;
+                copyButton.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                    </svg>
+                `;
+                setTimeout(() => {
+                    copyButton.innerHTML = originalIcon;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        });
+    }
+});
